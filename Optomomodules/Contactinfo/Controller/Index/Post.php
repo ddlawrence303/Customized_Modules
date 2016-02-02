@@ -8,47 +8,47 @@
     * 3. Setting service email and contact admin users' email in Admin Interface(Magento), which is for sure about the {$sender}, {$email} and related information.
     *
     * [User Guide Reference]
-  * http://devdocs.magento.com/guides/v2.0/frontend-dev-guide/templates/template-email.html#customize-email-templates
-  *
-   * [Testing] Contact Template Content need to be prepared
+    * http://devdocs.magento.com/guides/v2.0/frontend-dev-guide/templates/template-email.html#customize-email-templates
+    *
+    * [Testing] Contact Template Content need to be prepared
     * This module is just for staging testing, and you can give me some feedback if any questions during your testing.
     *
-   * [Author] Lawrence Lin (ddlawrence303@gmail.com)
+    * [Author] Lawrence Lin (ddlawrence303@gmail.com)
     *
     * [Create Time] 2016.02.02
-   */
+    */
 
 namespace Optomamodules\Contactinfo\Controller\Index;
 
 class Post extends \Magento\Contact\Controller\Index
- {
+{
          /**
           * exec post user question
           * @return void
-         * @throws \Exception
-           */
+          * @throws \Exception
+          */
          public function execute()
-       {
+         {
                  $post = $this->getRequest()->getPostValue();
                  if (!$post) {
                         $this->_redirect('*/*/');
                         return;
                   }
-                $this->inlineTranslation->suspend();
+                 $this->inlineTranslation->suspend();
                  try {
                         $postObject = new \Magento\Framework\DataObject();
                         $postObject->setData($post);
 
-                       $error = false;
+                        $error = false;
 
                         /* validate-checking */
                         if (!\Zend_Validate::is(trim($post['name']), 'NotEmpty')) {
                                 $error = true;
                         }
                           
-                            if (!\Zend_Validate::is(trim($post['comment']), 'NotEmpty')) {
+                        if (!\Zend_Validate::is(trim($post['comment']), 'NotEmpty')) {
                                 $error = true;
-                         }
+                        }
 
                         if (!\Zend_Validate::is(trim($post['email']), 'EmailAddress')) {
                                  $error = true;
@@ -58,8 +58,8 @@ class Post extends \Magento\Contact\Controller\Index
                           * setting custome param
                           * add new elements : product_name & product_sku information
                           */
-                       if (array_key_exists('product_name', $post) && array_key_exists('product_sku', $post)) {
-                              if (!\Zend_Validate::is(trim($post['product_name']), 'NotEmpty')) {
+                        if (array_key_exists('product_name', $post) && array_key_exists('product_sku', $post)) {
+                                if (!\Zend_Validate::is(trim($post['product_name']), 'NotEmpty')) {
                                          $error = true;
                                 }
 
@@ -79,7 +79,7 @@ class Post extends \Magento\Contact\Controller\Index
 
                         /* Transport email to user */
                         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-                         $transport = $this->_transportBuilder
+                        $transport = $this->_transportBuilder
                                ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
                                 ->setTemplateOptions(
                                          [
@@ -93,7 +93,7 @@ class Post extends \Magento\Contact\Controller\Index
                                 ->setReplyTo($post['email'])
                                ->getTransport();
 
-                            $transport->sendMessage();
+                        $transport->sendMessage();
                         $this->inlineTranslation->resume();
                         $this->messageManager->addSuccess(
                                  __('Hi there, this is Optoma, and thanks for your contacting with us about your questions by nice information, and we will notify you very     soon, see you next time~')
@@ -104,8 +104,8 @@ class Post extends \Magento\Contact\Controller\Index
                         return;
                 } catch (\Exception $e) {
                          /* Error Log should be noted here */
-                         $this->inlineTranslation->resume();
-                         $this->messageManager->addError(
+                        $this->inlineTranslation->resume();
+                        $this->messageManager->addError(
                                 __('Hi there, this is Optoma, so sorry for that we just cant\'t process your request right now, please wait a minutes and we will contact y    ou very soon~')
                         );
                         $this->_redirect('contact/index');//todo
