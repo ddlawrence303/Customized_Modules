@@ -80,18 +80,18 @@ class Post extends \Magento\Contact\Controller\Index
                         /* Transport email to user */
                         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
                         $transport = $this->_transportBuilder
-                               ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
+                                ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
                                 ->setTemplateOptions(
                                          [
                                                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
                                                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                                         ]
                                  )
-                                 ->setTemplateVars(['data' => $postObject])
+                                ->setTemplateVars(['data' => $postObject])
                                 ->setFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope))
-                               ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
+                                ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
                                 ->setReplyTo($post['email'])
-                               ->getTransport();
+                                ->getTransport();
 
                         $transport->sendMessage();
                         $this->inlineTranslation->resume();
